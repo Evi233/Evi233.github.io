@@ -1,43 +1,102 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh">
 
 <head>
-	<meta charset="utf-8" name="viewport" content="width=device-width,initial-scale=1">
-	<title>Class1 Grade7's Homepage</title>
-	<link rel="stylesheet" href="/utils/style.css">
-	<script>if (!window.Promise) location.href = '/412.html';</script>
-	<script src="/utils/main.js"></script>
+    <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1">
+    <title>Class1 Grade7's Homepage</title>
+    <link rel="stylesheet" href="/utils/style.css">
+
+    <!-- Favicon -->
+    <link rel="icon" href="/utils/favicon.ico" type="image/x-icon">
+
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f8f8;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        p {
+            color: #555;
+        }
+
+        a {
+            text-decoration: none;
+            color: #007BFF;
+        }
+
+        a:hover {
+            color: #0056b3;
+        }
+
+        .index {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .content {
+            display: flex;
+            justify-content: space-around;
+        }
+
+        fieldset {
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .footer {
+            margin-top: 20px;
+            text-align: center;
+            color: #888;
+        }
+
+        @media only screen and (max-width: 600px) {
+            .content {
+                flex-direction: column;
+            }
+        }
+    </style>
 </head>
 
 <body>
-      <h1>这是给音德尔第一中学初二一班的网站！</h1>
-      <p>谁能给出个主意，这个网站用来干嘛</p>
-      <p>有想法可以联系我（Evidence）</p>
-      <p>会有一个想法被采纳</p>
-      <p>本网站保证开80年，剩下的我就不管了。</p>
-	<div class="index">
-		<div class="content">
-			<fieldset>
-				<legend>工具</legend>
-				<a href="/note.txt">道德笔记</a>
-				<a href="/emote_scraper" class="hide">b站表情图获取工具</a>
-				<a href="/nickitem">QQ群聊代码生成器</a>
-				<a href="/timer">倒计时</a>
-			</fieldset>
-			<fieldset>
-				<legend>实验室（暂不开放）</legend>
-				
-			</fieldset>
-			<fieldset>
-				<legend>娱乐</legend>
-				<a href="/canvas/ball">小球碰撞</a>
-				<a href="/phigros/">phigros模拟器</a>
-				<a href="/iceandfire.html">冰与火之舞（vulkan）模拟器</a>
-                        <a href="/Minecraft.html">伪Minecraft</a>
-			</fieldset>
-		</div>
-		<p class="footer"> copyright© Evidence</p>
-	</div>
+    <h1>这是给音德尔第一中学初二一班的网站！</h1>
+    <p>谁能给出个主意，这个网站用来干嘛</p>
+    <p>有想法可以联系我（Evidence）</p>
+    <p>会有一个想法被采纳</p>
+    <p>本网站保证开80年，剩下的我就不管了。</p>
+    <div class="index">
+        <div class="content">
+            <fieldset>
+                <legend>工具</legend>
+                <a href="/note.txt">道德笔记</a>
+                <a href="/emote_scraper" class="hide">b站表情图获取工具</a>
+                <a href="/nickitem">QQ群聊代码生成器</a>
+                <a href="/timer">倒计时</a>
+            </fieldset>
+            <fieldset>
+                <legend>实验室（暂不开放）</legend>
+            </fieldset>
+            <fieldset>
+                <legend>娱乐</legend>
+                <a href="/canvas/ball">小球碰撞</a>
+                <a href="/phigros/">phigros模拟器</a>
+                <a href="/iceandfire.html">冰与火之舞（vulkan）模拟器</a>
+                <a href="/Minecraft.html">伪Minecraft</a>
+            </fieldset>
+        </div>
+        <p class="footer"> copyright© Evidence</p>
+    </div>
 </body>
 
 </html>
