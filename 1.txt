@@ -1,0 +1,861 @@
+竖折手机外屏应用开发适配指导书
+一、简介
+本文是针对竖折手机外屏的适配指导，包括外屏小应用介绍、UI 适配指南、开发指导以及针对 OPPO 设备的一些适配建议，用于引导设计师与开发者快速将自己的应用适配到竖折手机外屏上，为用户提供良好的外屏使用体验。
+
+1.1 屏幕与使用形态
+竖折手机：基于柔性屏幕技术打造的，支持竖向折叠改变形态的手机。
+折叠态： 折起后的形态，具备更小的屏幕尺寸。
+展开态： 完全展开后的形态，具备更大的屏幕尺寸，使用体验类似直板手机。
+半折态： 屏幕未完全展开的形态，可以平稳悬停，提供稳定的支架体验。
+外屏：竖折手机折叠后，外部仍然可见的较小尺寸屏幕。
+内屏：竖折手机展开后，内部展示出的尺寸较大的屏幕。
+image.png
+
+1.2 外屏界面
+主页（ Home）：外屏主页页面，承载小组件、通知、百变视窗区展示功能。
+小组件（Widgets）：又称外屏主页组件。既是小应用/快捷操作的入口，也可直观展示一些来自应用的轻量信息。
+应用列表（Library）：小应用展示页面，展示处于订阅状态的小应用图标，支持小应用的启动。
+小应用（Mini App）：针对竖向折叠机形态的外屏开发的应用。
+image.png
+
+二、外屏框架与交互
+2.1 主页
+2.1.1 小组件
+小组件是小应用/快捷操作在主页上4的快速入口，同时也可以呈现一些来自应用的轻量信息，让用户可以在外屏快速触达小应用核心服务能力。
+
+
+点击小组件，将直接进入对应的小应用：
+
+image.png
+
+长按主页空白区域进入编辑状态，可以对小组件进行编辑与替换：
+
+image.png
+
+2.1.2 应用通知
+外屏显示与内屏一致的通知列表。
+
+最新的通知会显示在主页底部。上滑可以进入通知中心，并查看更多通知；
+
+点击通知将展开通知详情，方便用户快速查看概要内容；
+
+image.png
+
+查看内容详情
+通知对应的内容可在外屏小应用中打开时，详情页内可显示“打开应用”按钮。点击按钮，即可在外屏直接打开相关页面；
+没有对应外屏小应用，或不支持在外屏小应用中打开对应内容时，仅显示“展开手机继续”。展开手机后，自动使用内屏应用打开相关页面。
+image.png
+
+2.2 快捷开关
+与内屏控制中心相似，外屏任意界面下从屏幕顶部向下滑动，即可呼出快捷开关页。
+
+快捷开关页仅能实现简单的功能开关、亮度调节等操作。
+image.png
+
+快捷开关为系统功能，开发者无需进行适配。
+
+2.3 应用列表
+2.3.1 进入与退出应用列表
+外屏主页中向左滑动，可以进入应用列表，查看并使用外屏小应用；
+
+同样，在应用列表中向右滑动，可以返回外屏主页。
+
+image.png
+
+2.3.2 添加与移除小应用
+安装支持的应用后，对应的小应用会自动添加到外屏应用列表中；
+
+编辑模式下，可以移除应用列表中的小应用。移除后，不会影响应用在内屏的使用。
+
+点击左上角“添加”按钮并展开手机，或在内屏进入「设置」-「折叠屏专区」-「外屏小应用」页，可将已移除的应用重新添加到外屏应用列表中。
+
+image.png
+
+2.4 小应用
+小应用是 OPPO 折叠屏外屏承载功能的主要方式，是应用针对外屏开发的独立界面。以简洁的设计、适合的信息密度、轻快的交互给用户在外屏提供丰富多彩的功能。
+
+2.4.1 进入应用
+小应用可通过应用列表、小组件、应用通知、小布建议通知进入。用户在不同的场景下，均可以通过小应用查看丰富的信息，或快捷地使用功能。
+image.png
+
+2.4.2 使用应用
+2.4.2.1 全局手势
+外屏尺寸较小，使用导航按键会导致应用空间被进一步挤占，体验不佳。因此，全局均使用手势进行基本导航。
+
+为尊重与延续用户的基本习惯，外屏的全局手势与内屏保持基本一致；
+
+image.png
+
+2.4.2.2 内外屏接续
+受限于屏幕尺寸或设计方案，当某功能的后续操作无法在外屏完成时，应用可以调用系统接续提示，引导用户展开手机继续使用，并在展开手机后直接启动相关界面。
+
+image.png
+
+2.4.3 退出应用
+与内屏应用一样，小应用退出后，会保持在后台继续运行。
+
+当前主要存在以下几种退出方式：
+
+全局手势退出
+用户可在应用主界面通过侧边返回手势退出应用，或在任何界面下通过底部上滑手势退出应用；
+
+退出后，将返回进入应用之前的页面。
+image.png
+
+息屏退出
+外屏息屏后，当前小应用会自动退出。重新点亮屏幕后，将自动返回主页。
+
+接续后退出
+小应用运行时，展开手机进入内屏，应用会接续到内屏界面上。
+
+此时重新折起手机返回外屏，将自动返回主页。
+
+三、设计适配指南
+素材包
+点击这里下载设计素材包《OPPO竖折手机外屏应用设计素材包》，请使用 Figma 查看与编辑。
+
+3.1 小应用设计
+3.1.1 设计原则
+与内屏应用不同，小应用需要适合外屏的使用场景与特点，为用户打造直觉，轻盈，高效，灵动的小折外屏使用体验。设计适配的过程中，应用开发者需要遵循以下原则：
+
+3.1.1.1 延续内屏体验
+为保证一致性与易用性，小应用与内屏应用的对应功能界面、操作逻辑与使用体验应当具有相似性；
+image.png
+
+如果小应用有核心功能操作，同样建议尽量与内屏保持相同。
+image.png
+
+此外，小应用需要充分继承内屏应用中的用户数据与自定义内容，避免用户在内外切换时出现信息断裂。
+
+3.1.1.2 聚焦核心场景
+应用可能有着丰富的功能，但如果全部放置在外屏小应用中，可能导致界面过于复杂，分散核心价值，增加用户的使用负担。
+
+我们建议小应用仅围绕核心场景或功能进行设计，专注解决该场景的问题。若您的应用存在多种互不相关的核心功能，可以拆解为多个小应用进行呈现。
+image.png
+
+在功能的裁剪过程中，需注意保留用户高频使用的核心功能，保证小应用的实用性与使用价值。
+
+image.png
+
+3.1.1.3 独立运行
+小应用应当能够在外屏独立实现所有功能。除个别无法规避的场景外，需尽量避免需要展开手机进入内屏才能继续使用的情况。
+
+如果您的内屏应用中存在某个功能，在使用过程中存在某个流程必须使用内屏，建议不要将此功能添加到小应用中。
+
+3.1.2 应用图标与名称
+应用图标与名称会显示在外屏应用列表与内屏设置页中。
+
+由于小应用可能仅为内屏应用的部分功能，应用需要单独交付一套图标，供小应用显示使用。
+
+图标的切图规范如下所示：
+image.png
+
+由于小应用仅是内屏应用部分功能在外屏的呈现，您的一个内屏应用可能对应多个外屏小应用。请按照以下规则来确认小应用的图标与名称：
+
+如果您的小应用是唯一的，或者应用映射了内屏应用的唯一核心功能，可以直接使用内屏应用的图标与应用名称。
+如果您的小应用仅是内屏应用的部分非核心功能，或您创建了多个小应用，分别对应内屏同一应用的不同核心功能，请针对小应用所映射的功能，重新绘制小应用图标，并且使用与其功能匹配的名称。
+image.png
+
+关于如何将小应用显示在外屏应用列表中，请参考 4.3.1 小应用外屏应用列表接入适配。
+
+3.1.3 应用鉴权
+用户首次打开应用时，通常需要完成鉴权流程，包括用户须知与权限获取；
+
+与内屏类似，开发者通常只需完成“用户须知”页面的设计，权限申请与获取弹窗由系统提供。
+image.png
+
+鉴权失败，或用户未授予权限时，应用应提供无权限时的空页面状态与合理的引导，允许用户便捷地重新获取权限；
+
+鉴权失败两次后，无法再弹出授权弹窗，可能需要接续到内屏进行权限的设置。请参见 3.1.5 内外屏接续。
+image.png
+
+3.1.4 内外屏接续
+OPPO 竖折手机产品支持应用跨越内外屏进行流转。遇到外屏无法顺畅完成的功能，应用可以接续到内屏继续进行。同样，用户也可以通过接续到内屏，获得更多的信息，或触发某些操作。
+
+3.1.4.1 接续类型
+常见的接续分为“直接接续”与“提示型接续”两种类型。
+
+直接接续
+直接接续，指在使用小应用时展开手机到内屏，内屏接续到对应应用的对应页面；
+
+直接接续符合用户自然理解与感知，可以为用户提供连续、稳定的使用体验。
+
+image.png
+
+提示接续
+当用户触发了无法在外屏完成的功能时，可以通过提示的方式引导用户展开到内屏后继续；
+
+设计时，请尽量维持小应用独立运行的原则，仅在必要时使用提示接续。
+image.png
+
+3.1.4.2 接续提示
+接续提示由接续动画、提示标题、自定义信息与取消按钮组成；
+
+应用仅可以编辑自定义信息的内容。如果接续目标足够清晰，可以不显示自定义信息；
+
+撰写时，请尽量简洁清晰地说明接续的目标，避免冗长或使用过于专业的术语。
+
+image.png
+
+关于接续的开发适配，请参考 4.3.4 小应用外屏至内屏接续。
+
+3.1.5 应用界面设计
+竖折手机外屏尺寸很小，为保证舒适使用，请勿直接将内屏应用界面原样搬到外屏。
+
+设计小应用界面时，须遵循小而美的原则，着力打造轻盈，高效，灵动的使用体验。
+
+image.png
+
+3.1.5.1 应用框架
+基本结构
+与内屏应用一样，如果页面内容较多，呈现竖直信息流，上下滚动查看剩余的内容。
+
+此外，外屏小应用应当尽量扁平，减少层级与跳转。如果存在多种功能，建议以卡片页形式并列放置，通过左右滑动进行切换。
+image.png
+
+二级页
+为容纳更丰富的功能，小应用支持使用二级页。
+
+设计应用时，请注意合理安排功能层级，尽可能保证主流程在第一级完成，仅使用二级页承载附加功能或详情信息。
+image.png
+
+3.1.5.2 页面布局
+小应用的典型布局结构如下图所示:
+
+image.png
+
+当小应用功能唯一且足够明确时，应用首页可以不显示标题栏；
+
+如果页面中存在核心操作按钮，请优先放置在页面的底部区域。
+
+3.1.5.3 界面设计
+聚焦关键信息
+在设计小应用页面时，可以在内屏应用的基础上，对附加功能、信息进行一定程度的删减，或改变其呈现的样式与位置。通过去除低价值的信息，或者扁平化展示深层的内容，在保留核心应用体验的基础上，实现更聚焦，更轻量的应用设计。
+
+image.png
+
+凸显核心元素
+页面中存在核心元素时，建议使用更加显著的尺寸或颜色，增大这些元素与其他内容的对比，便于快速阅读并获取关键信息。
+image.png
+
+明确操作边界
+可以操作的卡片或按钮，建议添加明确的边界，给予用户确定感与更强的使用信心。
+
+image.png
+
+图形化表达
+设计时，可以充分运用丰富灵动的色彩与图形来展示内容和场景；
+
+由于外屏的清晰度与尺寸和内屏存在差异，建议使用明确而规整的图形，保证界面清晰易于辨识，内容信息易于获取；
+
+此外，设计小应用界面时，需保证表意清晰，避免因为图形化提升用户的理解成本。
+
+image.png
+
+文字与可用性
+请使用 sp 来定义您应用中的字体尺寸，在不同设备上，使用 sp 尺寸的文字会自动适配屏幕大小的变化，保持舒适的显示大小。
+在竖折手机外屏上，为保证字体清晰可见，且不会显示过大而影响界面，建议将字号大小设置在 12sp 至 30sp 之间。其中，建议标题与主要信息字号 20sp≤S≤30sp，内容与阅读类文字字号 14sp≤S≤18sp，辅助信息字号 12sp。
+存在核心元素或信息时，可适当进一步增大字号；
+基于屏幕素质限制，我们不建议将中文设置为 12sp 以下，或将英文设置为 10sp 以下。在此尺寸下，字符可能会出现模糊，并导致难以阅读。
+image.png
+
+3.1.5.4 应用操作
+操作设计
+由于外屏尺寸较小，如果应用没有唯一核心操作，我们建议开发者在内屏界面的基础上，考虑通过扩大热区或使用非精确操作的方式，进一步优化用户的操作成功率与使用安全感。
+
+image.png
+
+手势操作热区
+与内屏一样，外屏同样存在全局手势导航。从底部上滑触发退出，左右两侧向内滑动触发返回，顶部下滑开启快捷开关。相关触发热区范围如下图所示。
+
+设计小应用时，请避免在这些区域里放置可交互的元素。
+image.png
+
+关于全局手势适配的开发指导，请参考4.3.2 小应用全局手势适配。
+
+
+极限情况下，如果可交互元素占用了部分返回手势热区，系统 API 支持排除部分区域对手势的响应，支持小应用在这些区域内正常触发自己的元素或功能，如下图案例所示。
+
+为避免滥用 API，导致用户难以正常触发返回操作，屏幕每个边缘的返回热区最多只能被应用裁剪 144dp。如果应用申请裁剪的高度超过 144dp，系统仅会兑现申请区域中最下方的 144dp。
+
+image.png
+
+如需使用此 API，请参考 4.3.2.2 使用手势区域排除 API。
+
+3.2 小组件设计
+小组件给用户提供在外屏主页上一步直达的能力，包括直接获取信息，或点击进入小应用。
+
+可以根据小应用自身的特点为用户提供不同样式的小组件，一个小应用可以包含1个或多个对应的小组件。
+
+3.2.1 小组件类型
+小组件有 5 种类型，可以根据应用的实际需要进行选用。
+image.png
+
+3.2.2 内容构成
+根据其需要表达的信息不同，不同类型的小组件也会以不同的内容结构呈现。
+
+您可以在设计素材包中找到所有类型组件的模板文档。通过替换对应内容，设计师与开发者可以快速完成小组件的设计与实现。
+
+image.png
+image.png
+
+针对未获授权或没有数据的情况，小组件的数据区域同样需具备空状态。
+image.png
+
+3.2.3 操作响应
+小组件当前仅展示信息，不承载操作行为；
+
+点击小组件，统一跳转到对应小应用的页面。
+image.png
+
+关于小组件的开发适配，请参考 4.3.3 小应用外屏小组件接入。
+
+3.3 通知适配
+外屏显示与内屏一致的通知列表。
+
+进入通知详情后，可以展开手机，使用内屏应用打开对应内容。
+image.png
+
+当通知对应的内容可在外屏小应用中打开时，应用可在通知详情页内额外配置“打开应用”按钮。配置的外屏开启按钮可以与通知内原本配置的按钮共同出现。
+image.png
+
+如果您希望使用外屏小应用打开通知内容，请参考4.3.6 外屏通知打开小应用适配进行开发。
+
+
+用户开启小布建议后，外屏同样会实时显示小步建议通知。相对于锁屏通知，小步建议通知无需用户授权，并始终实时显示在主页。
+点击小布建议通知，将直接在外屏打开内屏应用。此特性应用无需特殊适配。
+image.png
+
+四、外屏小应用开发适配指南
+4.1 小应用外屏开发规范
+1、开发规范：整体按通用 Activity 流程开发即可，适配部分参考：3.2 章节和3.3 章节
+
+2、layout 须遵循自适应布局开发原则
+
+推荐使用响应式布局，来适应后期各种外屏尺寸/状态。
+
+可参考 Google 指导： https://developer.android.com/guide/topics/large-screens/migrate-to-responsive-layouts?hl=zh-cn
+
+3、外屏的density是296，1dp=1.85px，drawable资源优先取的是xhdpi目录下的，如果使用位图资源，系统取图时会缩放到/21.85返回（如果放置到xxhdpi下，系统取图时会缩放到/31.85返回）。所以推荐使用矢量图资源，不会因为缩放导致失真；如果使用位图资源，要根据真实需要的尺寸*资源目录的缩放倍数再放置到正确的资源目录下。如果放置的drawable资源希望系统直接返回真实的尺寸而不作任何缩放，可以放置到带-nodpi后缀的目录（比如drawable-nodpi、drawable-sw200dp-nodpi）。
+
+4、调试方法：通过以下命令模拟不同分辨率和 DPI 的布局兼容进行调试：
+
+adb shell
+wm size 382x720 // 修改分辨率
+wm density 296 // 修改 DPI
+wm size reset // 重置分辨率
+wm density reset // 重置 DPI
+如果要通过上述命令在外屏进行调试，请在命令后增加 -d 参数指定displayId为外屏。如：
+
+adb shell wm size 382x720 -d 1 // 修改分辨率
+4.2 应用多显示适配指南
+4.2.1 Activity 启动策略
+方式	说明
+默认
+(不主动指定 DisplayID)	系统中无对应 Activity 实例：
+UiContext
+发起方的 Context 如果是 UiContext 类型，则新启动的 activity 复用发起方的 DisplayID，即新启的 Activity 与发起方同在一个屏幕上。
+
+NonUiContext
+发起方的 Context 如果是 NonUiContext 类型，则新启动的 activity 将放置在用户最后一次与设备互动时或启动上一个 Activity 时所在的顶部屏幕上。
+
+系统中有对应 Activity 实例：
+复用系统中当前 Activity 实例所对应的屏幕
+指定
+(主动指定 DisplayID)	系统中无对应 Activity 实例： 在应用制定的 Display 上启动 Activity
+
+系统中有对应的 Activity 实例： 将已有的 Activity 实例从原显示屏幕迁移至指定屏幕
+应用通过 ActivityOptions.setLaunchDisplayId(int)指定启动 Activity 被放在哪个 display 上。
+
+// 获取外屏(非默认显示屏)
+private Display getSecondaryDisplay() {
+  DisplayManager dm = (DisplayManager) getSystemService(Context.DISPLAY_SERVICE);
+  Display defaultDisplay = dm.getDisplay(Display.DEFAULT_DISPLAY);
+  // FIXME: Primary display and second Physical display have the same name(Built-in screen)
+  // Need replaced by Display.getType()
+  for(Display d : dm.getDisplays("android.hardware.display.category.ALL_INCLUDING_DISABLED")) {
+    if (d.getDisplayId() != Display.DEFAULT_DISPLAY && d.getName().equals(defaultDisplay.getName())){
+      return d;
+    }
+  }
+  return null;
+}
+// Activity 主动启动到指定的 display 示例
+ActivityOptions options = ActivityOptions.makeBasic();
+options.setLaunchDisplayId(secondaryDisplayId);
+context.startActivity(intent, options.toBundle());
+三方应用需要外屏亮的时候，才可以获取到外屏的 display 信息。
+
+4.2.2 Window 启动策略
+添加非 Activity 窗口方式，需要指定一个 UiContext
+
+final DisplayManager dm = anyContext.getSystemService(DisplayManager.class);
+final Display primaryDisplay = dm.getDisplay(DEFAULT_DISPLAY);
+final Context windowContext = anyContext.createDisplayContext(primaryDisplay).createWindowContext(TYPE_APPLICATION_OVERLAY, null);
+final View overlayView = Inflater.from(windowContext).inflate(someLayoutXml, null);
+// WindowManager.LayoutParams initialization
+// ...
+// The types used in addView and createWindowContext must match.
+mParams.type = TYPE_APPLICATION_OVERLAY;
+//...
+ windowContext.getSystemService(WindowManager.class).addView(overlayView, mParams);
+4.2.3 应用显示信息
+Display APIs（Deprecated）
+image.png
+
+废弃 Api	替换 Api	接口说明
+Display#getSize	getWindowManager().getCurrentWindowMetrics()	获取当前窗口的大小
+Display#getRealSize	getWindowManager().getMaxinumWindowMetrics()	获取 activity 所在屏幕大小
+4.2.4 主副同显
+维度	说明
+定义	折叠机展开态下，主外屏同时被点亮并且各自显示独立的可交互的 UI
+场景	主屏给自己看， 外屏给他人看
+示意	image.png
+适配	按照 UI 类型分为：Activity、Window 两类。 系统主副屏当前只支持Window类别，不支持Activity类别。
+启动窗口到外屏 Display，窗口属性带上亮屏标识别。
+
+final Context windowContext = anyContext.createDisplayContext(secondaryDisplay)
+     .createWindowContext(TYPE_APPLICATION_OVERLAY, null);
+
+mParams.type = TYPE_APPLICATION_OVERLAY;
+// 添加亮屏 flag
+mParams.flag |= WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
+//...
+ windowContext.getSystemService(WindowManager.class).addView(overlayView, mParams);
+注：如果想要保持屏幕常量，可以对窗口添加常亮标识
+getWindow().getDecorView().setKeepScreenOn(true);
+
+4.3 外屏结构适配指南
+4.3.1 小应用外屏应用列表接入适配
+image.png
+
+外屏应用列表会在初始化、监听包广播变化的时候，通过 PackageManager 指定对应的 IntentFilter，查询应用的 ActivityInfo 组件信息，根据组件配置信息来决定新增、移除或更新应用列表内的 MiniApp 入口图标。
+
+4.3.1.1 小应用的 Activity 接入外屏应用列表
+应用在定义外屏要显示的 Activity 时，需要在 AndroidManifest.xml 对应的 Activity 标签内定义如下 action 和 category：
+
+<activity
+android:label="xxx"
+android:icon="xxx"
+android:exported="true">
+   ...
+   ...   
+   <intent-filter>
+      <action android:name="oplus.intent.action.MINI_LAUNCHER_MAIN"/>
+      <category android:name="android.intent.category.SECONDARY_HOME"/>
+      <category android:name="oplus.intent.category.MINI_LAUNCHER"/>
+    </intent-filter>
+    <meta-data
+     android:name="com.oplus.secondaryhome.entry.widget.icon"
+     android:resource="@drawable/ic_entry_widget_icon" />
+<activity>
+非必填：
+
+    <meta-data
+     android:name="com.oplus.secondaryhome.continuous"
+     android:value="true" />
+参数说明：
+
+字段	说明
+android:label	MiniApp 标题 （必填）
+android:icon	MiniApp 图标（如 activity 未配置则读取 application 的 icon），用于应用列表展示。有对应同时支持LABAPP的应用时，建议配置图标以跟LABAPP区别开来 图标尺寸：至少为 72x72dp。
+android:exported	声明组件为公开的（必填）
+category：android.intent.category.SECONDARY_HOME	支持在 SecondaryHome 外屏显示 （必填）
+category：oplus.intent.category.MINI_LAUNCHER	支持在 SecondaryHome 的应用列表列表显示 （必填）
+action：oplus.intent.action.MINI_LAUNCHER_MAIN	SecondaryHome 的应用列表列表启动 Action （必填）
+meta-data： com.oplus.secondaryhome.continuous	value 为 true：表示支持外屏切换内屏接力显示（非必填），应用需要动态适配切换
+备注：
+
+1）通常只需配置一级的入口 Activity 即可，如配置多个 Activity 则应用列表列表会显示多个 入口图标（即被定义为多个 MiniApp）。
+
+2）Activity 按照接入外屏的使用场景可区分为以下三种：
+
+Activity 只在外屏使用
+按上述接入指导，需要在 AndroidManifest.xml 对应的 Activity 标签内定义 action 和 category 参数。
+
+Activity 在内外均使用，功能一样，界面有差异
+这种场景在满足第 1 种情况的基础上，还需要针对外屏提供一套单独的 layout 来适应外屏的屏幕尺寸。可参考 Google 指导： https://developer.android.com/training/multiscreen/screensizes?hl=zh-cn
+
+Activity 在内外均使用，功能不同
+建议按“Activity 只在外屏使用”情况处理，创建一个单独的 Activity 用于外屏显示，避免功能逻辑混杂，后期维护困难。
+
+4.3.1.2 外屏应用列表启动 Activity
+1）Activity 按以上接入应用列表要求配置外屏特定的 Intent-Filter 参数后，当外屏应用列表启动该 Activity 时会默认指定到外屏上显示，应用侧无须额外操作。后续由该 Activity 启动的 Activity 复用同一 DisplayID，即新启的 Activity 与发起方同在外屏上显示。
+
+2）Activity 内部启动新的 Activity
+
+新启动的 Activity 默认复用发起方的 DisplayID，即新启的 Activity 与发起方同在一个屏幕上显示。当主动指定启动的 LaunchDisplayId 时，则按照指定的 DisplayId 进行显示。
+
+4.3.2 小应用全局手势适配
+4.3.2.1 返回手势适配
+image.png
+1）返回手势定义：从距离屏幕左侧或右侧边缘预定的宽度区域 xxdp 向屏幕内滑动超过预定的水平距离后抬手形成返回手势。该手势的系统表现等同于 Back 键，即执行后退操作，在应用场景中可表现为返回上一层级界面或取消操作。
+
+2）返回手势适配：火烈鸟外屏支持通过手势返回上一级和退出应用，接入方需要在 Activity 的退出和返回接口中实现相关逻辑。如：
+
+public void onBackPressed()
+4.3.2.2 应用使用手势区域排除 API
+image.png
+
+1）手势区域排除定义
+
+支持应用调用手势区域排除 API 从系统手势区域中切出一部分用来响应自己的手势交互，当应用视图被布局时 (onLayout)，或是当视图被绘制时 (onDraw) 生效系统手势排除行为。
+为避免应用过度滥用 API 导致整个侧滑返回手势失效，限制屏幕的每个边缘最多只能被应用切除 xxdp。当应用申请裁切区域超过 xxdp 时，系统仅兑现应用申请区域中位于最下方的 xxdp。
+2）手势区域排除 API：View.setSystemGestureExclusionRects
+
+public void setSystemGestureExclusionRects(@NonNull List<Rect> rects) 
+4.3.2.3 Home 上滑手势适配
+image.png
+
+外屏灵动桌面通过 InputManager 监听全局事件，会拦截消费指定区域内的触摸事件，如手势服务识别为手势为上滑退出，则业务方无法收到一系列的上滑事件，如识别非上滑退出手势（例如左右滑动）手势服务会执行补点操作，业务方可以正常响应事件。
+
+
+1）上滑手势定义：从距离屏幕底部边缘预定的高度区域 xxdp 向上滑动（包含快速上滑和上滑停顿）超过该预定的垂直距离后抬手形成上滑手势。该手势的系统表现等同于 Home 键，即退出应用。
+2）上滑手势适配：上滑手势不需要业务方做特殊的接口适配，只需要在 UI 设计上避免可交互的控件（例如 ListView）与底部手势识别区域重叠，在此区域内上滑手势会被手势服务拦截。
+
+4.3.2.4 下拉手势适配
+image.png
+
+1）顶部下拉手势定义：从距离屏幕顶部边缘预定的高度区域 xxdp 向下滑动跟手呼出快捷开关面板，当滑动超过该预定垂直距离后抬手则延续动画将完整快捷开关面板显示出来。当垂直滑动距离未超过预定的高度区域抬手时，快捷开关面板向上收起，撤销本次操作。
+
+2）下拉手势适配：
+
+只需要在 UI 设计上避免可交互的控件（例如 ListView）与顶部手势识别区域重叠，在此区域内下滑手势会被拦截。
+
+4.3.3 小应用外屏小组件接入适配
+外屏小组件分为入口组件和信息小组件两种：
+image.png
+
+4.3.3.1 入口小组件
+入口小组件为外屏小应用在锁屏主页中的入口，由用户在个性化中配置，点击后可跳转到外屏小应用对应的页面，需在小应用对应页面的 Activity 配置项中增加 meta-data 配置；
+
+<activity
+android:label="xxx"
+android:icon="xxx"
+android:exported="true">
+   ...
+   ...  
+    <intent-filter>
+      <action android:name="oplus.intent.action.WIDGET_ENTRY"/>
+      <category android:name="android.intent.category.SECONDARY_HOME"/>
+    </intent-filter>
+    <meta-data
+     android:name="com.oplus.secondaryhome.entry.widget.icon"
+     android:resource="@drawable/ic_entry_widget_icon" />
+    <meta-data
+     android:name="com.oplus.secondaryhome.entry.widget.title"
+     android:resource="@string/entry_widget_title" />
+<activity>
+intent-filter 配置说明：
+
+字段	说明
+action：oplus.intent.action.WIDGET_ENTRY	SecondaryHome 的入口小组件启动 Action （必填）
+category：android.intent.category.SECONDARY_HOME	Activity 支持在 SecondaryHome 外屏显示 （必填）
+meta-data 配置说明：
+
+名称	字段	说明
+com.oplus.secondaryhome.entry.widget.icon	android:resource	小组件图标，用于百变视窗小组件显示；如未配置，则不会提供该小应用的入口小组件供用户选择。 图标尺寸：24dp*24dp，只需提供中间图标部分，不包含圆形背景； 图标资源类型：SVG文件
+com.oplus.secondaryhome.entry.widget.title	android:resource	小组件名称，用于百变视窗小组件选择列表中显示使用；
+MiniAPP 名称
+4.3.3.2 信息小组件
+泛在服务的 upk 里支持新增外屏入口，config.json 参考如下：
+{
+...
+ "runtime": {
+    "type": "interactive",  // 13.1 固定为 interactive
+    "permission": [ "pantanal.permissions.INTERNET" ],
+        "support-hardware": {
+      "device": [ // 支持的设备类型
+        {
+          "type": "PHONE",  // 手机
+          "entry": ["secondarylockscreen"] // 外屏锁屏入口
+                }
+      ]
+    },
+...
+}
+在 card-config.json 中配置订阅信息
+注意：name 和 previewImage 必填，该 2 个字段作为小组件列表展示的静态信息
+
+ "card": {
+    "support": "widget_1*1",
+    "subscrible": [
+      {
+        "size": "widget_1*1",
+         "name": "@string:strings.name",
+        "desc": "@string:strings.description",
+        "groupTitle": "@string:strings.groupTitle",
+        "groupImage": "@image:images/logo.png",
+        "previewImage": "@image:images/logo.png",
+        "cardLoadingIcon": "@image:images/logo.png"
+      }
+    ]
+  },
+增加外屏跳转外屏 MiniApp 能力
+在 card-config.json 里配置 click 字段，配置 MiniApp 的 deeplink
+
+    click:[{
+      "type": "uri",
+      "uri": "olink://com.oplus.secondaryhome/miniapp_card?cardId=xxxx"
+    }]
+4.3.4 小应用外屏至内屏接续适配
+小应用外屏至内接续当前支持两种场景：直接接续和提示接续。
+
+4.3.4.1 直接接续
+1、场景示例
+image.png
+
+2、开发指导
+
+业务基于自身特点独立完成接续逻辑，总体需要完成如下动作：
+
+外屏接续 UI 提示
+监听折叠事件并处理
+
+4.3.4.2 提示接续
+1、场景示例
+image.png
+
+2、开发指导
+
+TODO**：全页的接续说明页面将由系统完成，应用在需要接续启动 Activity 的时候添加如下标识**
+
+//OplusBaseIntent.java
+public final int OPLUS_FLAG_ACTIVITY_CONTINUE_REQUIRED = 0x10000000;
+
+// 使用
+IntentNative.addOplusFlags(OplusBaseIntent.OPLUS_FLAG_ACTIVITY_CONTINUE_REQUIRED )
+3、自定义接续描述指导
+
+接续页面的描述支持业务自定义，按下列方式添加到启动 Intent 里（如果不指定，则按照系统统一的接续描述进行显示）：
+
+final String EXTRA_DESCRIPTION = "oplus.intent.extra.DESCRIPTION";
+CharSequence description = "业务自定义接续描述";
+
+intent.putExtra(EXTRA_DESCRIPTION, description);
+备注：
+
+如果是接续到内屏应用主页的，在接续的跳转中需新增如下配置：
+
+intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+intent.action = "android.intent.action.MAIN"
+intent.addCategory("android.intent.category.LAUNCHER")
+4、统一接续授权页面指导
+image.png
+
+TODO：统一授权接续说明页面由系统完成，应用在需要接续启动 Activity 的时候添加如下标识
+
+//OplusBaseIntent.java
+public final int OPLUS_FLAG_ACTIVITY_CONTINUE_PRIVACY = 0x20000000;
+
+//使用
+IntentNative.addOplusFlags(OplusBaseIntent.OPLUS_FLAG_ACTIVITY_CONTINUE_REQUIRED
+| OplusBaseIntent.OPLUS_FLAG_ACTIVITY_CONTINUE_PRIVACY)
+说明：
+
+OPLUS_FLAG_ACTIVITY_CONTINUE_PRIVACY 必须与上述系统统一接续标识 OPLUS_FLAG_ACTIVITY_CONTINUE_REQUIRED 一起使用方能生效
+申请运行时权限**#requestPermission** 场景由系统统一修改，无需添加标识，用户须知，隐私声明等需要应用自己设置。
+addOplusFlags 可换成 setOplusFlags，demo：
+Intent targetIntent = ...；
+IntentNative.setOplusFlags(targetIntent, OPLUS_FLAG_ACTIVITY_CONTINUE_REQUIRED | OPLUS_FLAG_ACTIVITY_CONTINUE_PRIVACY);
+OplusBaseIntent.OPLUS_FLAG_ACTIVITY_CONTINUE_PRIVACY 未及时生效时，可先自定义整型常量 OPLUS_FLAG_ACTIVITY_CONTINUE_PRIVACY = 0x20000000 后直接使用。
+需要导入：
+
+implementation 'com.oplus.support:api-adapter-compat:13.0.0'
+注意：不接入 api-adapter 的模块请使用反射调用
+
+Method method = Intent.class.getMethod("setOplusFlags", int.class);
+method.invoke(intent, flags)
+4.3.5 最近任务显示适配
+4.3.5.1 最近任务定义
+按照 Task 为单位展示的最近任务列表（RecentTaskList）。Task 是用户所打开的一系列 Activity 的集合，Task 可以跨应用（Activity 可以来自同一个应用，也可以来自不同的应用）。
+
+4.3.5.2 竖折手机最近任务规格
+1、内外屏最近任务显示规格
+
+外屏：不支持显示最近任务
+
+内屏：支持显示最近任务，最近任务列表只支持显示在内屏被启动的 Task 且该 Task 不能包含外屏启动的 Activity。即包含以下两种情况：
+
+1）在外屏被启动的 Task 在系统层进行统一屏蔽
+
+2）包含外屏 Activity 的的 Task 在系统层进行统一屏蔽
+
+
+2、场景举例
+
+场景一（日历针对外屏新增一个独立的小应用 C，与内屏的日历应用无关联）
+
+Step1 外屏：通过应用列表点击日历图标开启小应用 C
+
+Step2 内屏：进入最近任务，最近任务列表不展示小应用 C 的任务卡片
+
+系统层方案：按照 Task 维度屏蔽外屏被启动的 Task
+
+
+场景二（日历应用针对外屏新增一个独立的 B 页面）
+
+Step1 内屏：通过桌面点击日历图标开启日历应用的 A 页面
+
+Step2 外屏：通过应用列表点击日历图标开启日历应用的 B 页面
+
+Step3 内屏：进入最近任务，最近任务列表仅显示日历应用 A 页面的 Task 卡片
+
+Step4 点击 Step3 中的 Task 卡片，进入日历应用的 A 页面
+
+
+系统层方案：按照 Task 维度屏蔽包含外屏 Activity 的 Task
+
+1）当 A 页面和 B 页面是同一个 Task 时：由于日历的 Task 包含外屏的 Activity，被系统屏蔽后内屏最近任务无法显示日历应用的任务卡片。
+
+2）当 A 页面和 B 页面是不同的 Task 时：系统层屏蔽 B 页面所在的 Task，最近任务中显示 A 页面所在的 Task 卡片。
+
+
+场景三（日历应用针对外屏复用内屏 A 页面）
+
+Step1 内屏：通过桌面点击日历图标开启日历应用的 A 页面
+
+Step2 外屏：通过应用列表点击日历图标开启日历应用的 A 页面
+
+Step3 内屏：进入最近任务，最近任务列表仅显示日历应用 A 页面的 Task 卡片
+
+Step4 点击 Step3 中的 Task 卡片，进入日历应用的 A 页面
+
+
+系统层方案：按照 Task 维度屏蔽包含外屏 Activity 的 Task
+
+
+3、最近任务适配
+
+外屏小应用的 Activity 在启动时按照新启 Task 进行适配。
+
+
+参数
+
+1）launchMode 参数类型设置为 singleTaskandroid:launchMode=“singleTask”
+
+2）设置 FLAG_ACTIVITY_NEW_TASK 标签Intent.FLAG_ACTIVITY_NEW_TASK
+
+3）taskAffinity 用于指定 Activity 属于哪一个 Taskandroid:taskAffinity=“xxx”
+
+具有相同的 taskAffinity 的 Activity 属于同一个任务。
+
+一个任务的 taskAffinity 取决于这个任务的根 Activity 的 taskAffinity。
+
+
+参数说明
+
+Activity 设置 singleTask 和 FLAG_ACTIVITY_NEW_TASK：在新 Task 中启动 Activity。
+
+1）如果要启动的 Activity 在其 taskAffinity 属性对应的 Task 中不存在，则在 Task 中新启动该 Activity 的实例。
+
+2）如果要启动的 Activity 在其 taskAffinity 属性对应的 Task 已经存在，则那个 Task 将被调入前台，最后保存的状态也将被恢复。
+
+
+注意："singleTask"的 launchMode 与 FLAG_ACTIVITY_NEW_TASK 标签都必须配合 taskAffinity 属性使用，如果不设置 taskAffinity 属性值，若已经存在的 Task 包含了要新启动的 Activity（taskAffinity 属性相同），则系统将不会生成新 Task，而是复用已有的 Task。
+
+4.3.6 外屏通知打开小应用适配
+image.png
+
+4.3.6.1 支持场景和范围
+通知支持拉起对应MiniApp界面：
+
+1）全屏通知fullscreenIntent自动拉起MiniApp（对应Notification.fullScreenIntent字段）
+
+2）通知点击响应拉起MiniApp（对应Notification.contentIntent字段）
+
+3）通知按钮点击响应拉起MiniApp（对应Notification.Action.actionIntent字段）
+
+支持Notification的PendingIntent范围：
+
+Notification click intent：Notification.contentIntent
+Notification action button intent：Action.actionIntent
+Notification full screen intent：Notification.fullScreenIntent
+4.3.6.2 外屏通知拉起MiniApp适配
+1）通过PendingIntent中携带extra信息标识是否可在外屏启动对应min-app界面。
+
+key值：String EXTRA_MINI_APP_ACTION_INTENT = “oplus_mini_app_intent”;
+
+value值：PendingIntent，对应拉起mini-app对应的activity（可在外屏显示和启动的activity）
+
+2）通知使用方在发送通知Notification时，在其对应PendingIntent信息（默认内屏的activity）中携带对应外屏信息（添加对应外屏mini-app跳转信息，即"oplus_mini_app_intent"对应外屏MiniApp的PendingIntent ）
+
+
+代码示例：
+
+// 构造minApp跳转intent，用于外屏时跳转
+Intent miniAppIntent = new Intent().setClassName(pkg, miniAppClsName);
+PendingIntent miniAppPendingIntent = PendingIntent.getActivityAsUser(mContext, 0,
+    miniAppIntent, PendingIntent.FLAG_UPDATE_CURRENT, null, user);
+// 构造通知默认跳转intent，用于主屏下默认跳转
+Intent intent = new Intent().setClassName(pkg, mainScreenClsName)
+    // 添加外屏跳转minApp跳转intent到Extra中
+    .putExtra(EXTRA_MINI_APP_ACTION_INTENT,miniAppPendingIntent);
+PendingIntent pendingIntent = PendingIntent.getActivityAsUser(mContext, 0,
+    intent, PendingIntent.FLAG_UPDATE_CURRENT, null, user);
+// 构造通知
+Notification.Builder ntfBuilder =
+    new Notification.Builder(mContext, NotificationChannels.GENERAL)
+    .setSmallIcon(R.drawable.ic_icon)
+    .setContentTitle(XX)
+    .setContentText(XX)
+     //设置点击通知跳转intent
+    .setContentIntent(pendingIntent)
+注意：
+
+1、通知发送参考
+
+https://developer.android.com/develop/ui/views/notifications/navigation
+
+2、extra携带的"oplus_mini_app_intent"内容PendingIntent遵循PendingIntent标准API
+
+3、需注意若PendingIntent为复用内容，PendingIntent创建时建议加上PendingIntent.FLAG_UPDATE_CURRENT标记以确保其数据更新。
+
+4.3.7 配置隔离项
+4.3.7.1 配置项
+配置项为：oplus.software.support_secondary_mini_app
+
+配置项作用：用于应用区分判断当前版本中，外屏是否支持 MiniApp、手势导航等特性。
+
+取值范围：
+
+true-13.2 火烈鸟等上下折叠小屏配置为 true
+false-非 13.2 火烈鸟及以后的上下折叠小屏（13.2 之前蜻蜓配置为 false）
+默认值：false
+4.3.7.2 使用举例
+image.png
+背景： 1、蜻蜓上相机通过暂态层实现业务页面，界面上显示统一的“把手”供用户下拉退出应用。 2、火烈鸟交互框架新增全局手势来供用户通过 BACK 手势退出。
+
+
+存在的问题： 在火烈鸟上的相机 APK（不显示把手），安装相机 APK 至蜻蜓时由于不支持全局手势造成无法退出。
+
+
+解决方案：
+1、相机应用需要兼容蜻蜓和火烈鸟的退出交互。
+2、特性隔离：通过配置项 oplus.software.support_secondary_mini_app 来识别是： 1）蜻蜓（不支持全局手势，需要显示把手条） 2）火烈鸟及后续的版本（支持全局手势，通过 BACK 手势退出）
+
+4.3.7.3 接口调用示例
+public static boolean isSecondaryMiniApp() {    
+       boolean isSecondaryMiniApp = false;     
+       try {         
+           Class<?> cls = Class.forName("com.oplus.content.OplusFeatureConfigManager");    
+      
+           Method instance = cls.getMethod("getInstance");         
+           Object configManager = instance.invoke(null);    
+      
+           Method hasFeature = cls.getDeclaredMethod("hasFeature", String.class);        
+           Object object = hasFeature.invoke(configManager, "oplus.software.support_secondary_mini_app"); 
+           if (object instanceof Boolean) {            
+                 isSecondaryMiniApp = (boolean) object;        
+           }    
+       } catch (ClassNotFoundException | NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {         
+        e.printStackTrace();    
+       }     
+
+     return isSecondaryMiniApp; 
+}
+附录
+适配 Checklist
+image.png
+
+文
