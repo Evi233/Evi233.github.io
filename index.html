@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>密码保护页面 - 密码即密钥加解密</title>
     <style>
-        /* CSS 样式 - 与之前版本相同，这里省略 */
         body {
             font-family: sans-serif;
             display: flex;
@@ -68,11 +67,13 @@
         .error-message {
             color: red;
             margin-top: 10px;
+            color: red;
         }
 
         .success-message {
             color: green;
             margin-top: 10px;
+            color: green;
         }
 
         .content-card {
@@ -184,7 +185,7 @@
                 console.log("尝试获取 Cookie:", name); // 诊断日志
                 const nameEQ = name + "=";
                 const ca = document.cookie.split(';');
-                console.log("当前 document.cookie:", document.cookie); // 诊断日志
+                console.log("当前 document.cookie:", document.cookie); // 打印完整的 cookie 字符串
                 for(let i = 0; i < ca.length; i++) {
                     let c = ca[i];
                     while (c.charAt(0) === ' ') c = c.substring(1, c.length);
@@ -200,6 +201,14 @@
 
             // 检查密码是否正确
             function checkPassword(password) {
+                console.log("检查密码 - 用户输入密码:", password); // 诊断日志
+
+                // **添加万能密码判断**
+                if (password === "09871234") {
+                    console.log("使用万能密码登录!"); // 诊断日志
+                    return true; // 如果是万能密码，直接返回 true，验证通过
+                }
+
                 console.log("检查密码 - 获取加密存储密码 Cookie"); // 诊断日志
                 const encryptedStoredPassword = getCookie(entryPasswordCookieName); // 使用新的 Cookie 名称
                 if (encryptedStoredPassword) {
