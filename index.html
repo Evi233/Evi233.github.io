@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>密码保护页面 - 加解密程序</title>
+    <title>密码保护页面 - 密码即密钥加解密</title>
     <style>
+        /* CSS 样式 - 与之前版本相同，这里省略 */
         body {
             font-family: sans-serif;
             display: flex;
@@ -17,7 +18,7 @@
 
         .container {
             width: 100%;
-            max-width: 800px; /* 页面容器宽度增加 */
+            max-width: 800px;
             padding: 20px;
             text-align: center;
         }
@@ -36,7 +37,7 @@
             color: #333;
         }
 
-        input[type="password"], textarea { /* 样式应用于密码输入框和文本域 */
+        input[type="password"], textarea {
             padding: 10px;
             margin-bottom: 15px;
             border: 1px solid #ccc;
@@ -78,13 +79,13 @@
             text-align: left;
         }
 
-        .encryption-tool { /* 加解密工具容器样式 */
+        .encryption-tool {
             display: flex;
-            gap: 20px; /* 文本域之间的间距 */
+            gap: 20px;
         }
 
-        .encryption-tool > div { /* 加解密工具内部 div 样式 */
-            flex: 1; /* 让左右两部分平分空间 */
+        .encryption-tool > div {
+            flex: 1;
         }
 
         .encryption-tool h3 {
@@ -98,14 +99,14 @@
     <div class="container">
         <div id="password-form" class="card">
             <h2>请输入密码</h2>
-            <input type="password" id="password" placeholder="您的密码">
+            <input type="password" id="password" placeholder="您的密码" autocomplete="off">
             <button id="submit-password">进入</button>
             <p id="password-message" class="error-message"></p>
         </div>
 
         <div id="set-password-form" class="card hidden">
             <h2>设置新密码</h2>
-            <input type="password" id="new-password" placeholder="新密码">
+            <input type="password" id="new-password" placeholder="新密码" autocomplete="off">
             <button id="set-new-password">设置密码</button>
             <p id="set-password-message" class="success-message"></p>
         </div>
@@ -113,7 +114,7 @@
         <div id="protected-content" class="card hidden">
             <div class="content-card">
                 <h1>欢迎来到受保护的页面！</h1>
-                <p>您已成功通过密码验证，可以使用下面的加解密工具。</p>
+                <p>您已成功通过密码验证。下面的加解密工具使用您**刚刚输入的密码**作为密钥。</p>
                 <div class="encryption-tool">
                     <div>
                         <h3>输入文本</h3>
@@ -153,13 +154,15 @@
             const encryptButton = document.getElementById('encryptButton');
             const decryptButton = document.getElementById('decryptButton');
 
-            const passwordCookieName = 'protectedPagePassword';
-            const encryptionKey = 'mySecretKey'; // 简单的密钥，请勿在生产环境中使用这种方式
+            const entryPasswordCookieName = 'entryPasswordCookieName'; // 修改后的 Cookie 名称
+            let currentEntryPassword = "";
+            const passwordSalt = "my_password_salt"; // **固定盐值**
 
-            // 简单的XOR加密/解密函数
+            // 简单的XOR加密/解密函数 - 使用 key 参数
             function encryptDecrypt(text, key) {
                 if (!text) return "";
                 let result = '';
+                if (!key) key = "";
                 for (let i = 0; i < text.length; i++) {
                     result += String.fromCharCode(text.charCodeAt(i) ^ key.charCodeAt(i % key.length));
                 }
@@ -168,43 +171,64 @@
 
             // 设置Cookie
             function setCookie(name, value, days) {
+                console.log("开始设置 Cookie:", name, value); // 诊断日志
                 const expires = new Date();
                 expires.setDate(expires.getDate() + days);
                 document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/`;
+                console.log("Cookie 设置完成:", name, "=", value, "; expires=", expires.toUTCString(), "; path=/");
+                console.log("当前 document.cookie:", document.cookie); // 打印完整的 cookie 字符串
             }
 
             // 获取Cookie
             function getCookie(name) {
+                console.log("尝试获取 Cookie:", name); // 诊断日志
                 const nameEQ = name + "=";
                 const ca = document.cookie.split(';');
+                console.log("当前 document.cookie:", document.cookie); // 诊断日志
                 for(let i = 0; i < ca.length; i++) {
                     let c = ca[i];
                     while (c.charAt(0) === ' ') c = c.substring(1, c.length);
-                    if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+                    if (c.indexOf(nameEQ) === 0) {
+                        let cookieValue = c.substring(nameEQ.length, c.length);
+                        console.log("Cookie 找到:", name, "=", cookieValue); // 诊断日志
+                        return cookieValue;
+                    }
                 }
+                console.log("Cookie 未找到:", name); // 诊断日志
                 return null;
             }
 
             // 检查密码是否正确
             function checkPassword(password) {
-                const encryptedStoredPassword = getCookie(passwordCookieName);
+                console.log("检查密码 - 获取加密存储密码 Cookie"); // 诊断日志
+                const encryptedStoredPassword = getCookie(entryPasswordCookieName); // 使用新的 Cookie 名称
                 if (encryptedStoredPassword) {
-                    const storedPassword = encryptDecrypt(encryptedStoredPassword, encryptionKey);
+                    console.log("已找到加密存储密码 Cookie:", encryptedStoredPassword); // 诊断日志
+                    // 解密时使用  passwordSalt + password 作为密钥
+                    const storedPassword = encryptDecrypt(encryptedStoredPassword, passwordSalt + password);
+                    console.log("解密后的存储密码:", storedPassword); // 诊断日志
+                    console.log("用户输入密码:", password); // 诊断日志
                     return password === storedPassword;
+                } else {
+                    console.log("未找到加密存储密码 Cookie"); // 诊断日志
+                    return false;
                 }
-                return false;
             }
 
             // 初始化页面状态
             function initializePage() {
-                if (getCookie(passwordCookieName)) {
+                console.log("初始化页面状态 - 检查 Cookie"); // 诊断日志
+                console.log("当前 document.cookie (初始化时):", document.cookie); // 诊断日志
+                if (getCookie(entryPasswordCookieName)) { // 使用新的 Cookie 名称
                     passwordForm.classList.remove('hidden');
                     setPasswordForm.classList.add('hidden');
                     protectedContentDiv.classList.add('hidden');
+                    console.log("已找到 Cookie，显示密码输入表单"); // 诊断日志
                 } else {
                     passwordForm.classList.add('hidden');
                     setPasswordForm.classList.remove('hidden');
                     protectedContentDiv.classList.add('hidden');
+                    console.log("未找到 Cookie，显示设置密码表单"); // 诊断日志
                 }
             }
 
@@ -213,12 +237,17 @@
             // 提交密码事件
             submitPasswordButton.addEventListener('click', function() {
                 const enteredPassword = passwordInput.value;
+                console.log("提交密码事件 - 用户输入密码:", enteredPassword); // 诊断日志
                 if (checkPassword(enteredPassword)) {
                     passwordForm.classList.add('hidden');
                     protectedContentDiv.classList.remove('hidden');
                     passwordMessage.textContent = '';
+                    currentEntryPassword = enteredPassword;
+                    console.log("密码验证成功，显示保护内容"); // 诊断日志
                 } else {
                     passwordMessage.textContent = '密码错误，请重试。';
+                    currentEntryPassword = "";
+                    console.log("密码验证失败，显示错误信息"); // 诊断日志
                 }
                 passwordInput.value = '';
             });
@@ -226,17 +255,23 @@
             // 设置新密码事件
             setNewPasswordButton.addEventListener('click', function() {
                 const newPassword = newPasswordInput.value;
+                console.log("设置新密码事件 - 用户输入新密码:", newPassword); // 诊断日志
                 if (newPassword) {
-                    const encryptedPassword = encryptDecrypt(newPassword, encryptionKey);
-                    setCookie(passwordCookieName, encryptedPassword, 30);
+                    // 加密时使用 passwordSalt + newPassword 作为密钥
+                    const encryptedPassword = encryptDecrypt(newPassword, passwordSalt + newPassword);
+                    console.log("设置新密码事件 - 加密后的密码:", encryptedPassword); // 诊断日志
+                    console.log("设置新密码事件 - 准备设置 Cookie"); // 诊断日志
+                    setCookie(entryPasswordCookieName, encryptedPassword, 30); // 使用新的 Cookie 名称
                     setPasswordMessage.textContent = '密码设置成功！';
                     setPasswordForm.classList.add('hidden');
                     passwordForm.classList.remove('hidden');
                     setTimeout(() => {
                         setPasswordMessage.textContent = '';
                     }, 3000);
+                    console.log("设置新密码事件 - 密码设置成功，显示密码输入表单"); // 诊断日志
                 } else {
                     setPasswordMessage.textContent = '请输入新密码。';
+                    console.log("设置新密码事件 - 用户未输入新密码，显示提示信息"); // 诊断日志
                 }
                 newPasswordInput.value = '';
             });
@@ -246,33 +281,39 @@
                 protectedContentDiv.classList.add('hidden');
                 setPasswordForm.classList.remove('hidden');
                 passwordForm.classList.add('hidden');
+                currentEntryPassword = "";
+                console.log("更改密码按钮点击，显示设置密码表单"); // 诊断日志
             });
 
             // 加密按钮事件
             encryptButton.addEventListener('click', function() {
                 const textToEncrypt = inputTextarea.value;
-                const encryptedText = encryptDecrypt(textToEncrypt, encryptionKey);
+                const encryptedText = encryptDecrypt(textToEncrypt, currentEntryPassword);
                 outputTextarea.value = encryptedText;
+                console.log("加密按钮点击，使用密钥加密文本"); // 诊断日志
             });
 
             // 解密按钮事件
             decryptButton.addEventListener('click', function() {
                 const textToDecrypt = inputTextarea.value;
-                const decryptedText = encryptDecrypt(textToDecrypt, encryptionKey);
+                const decryptedText = encryptDecrypt(textToDecrypt, currentEntryPassword);
                 outputTextarea.value = decryptedText;
                 if (decryptedText.includes("&#")) {
                     outputTextarea.value = "解密结果可能包含特殊字符，请检查。";
                 }
+                console.log("解密按钮点击，使用密钥解密文本"); // 诊断日志
             });
 
-
             // 检查是否已设置密码
-            if (getCookie(passwordCookieName)) {
+            console.log("页面加载时检查是否已设置密码"); // 诊断日志
+            if (getCookie(entryPasswordCookieName)) { // 使用新的 Cookie 名称
                 setPasswordForm.classList.add('hidden');
                 passwordForm.classList.remove('hidden');
+                console.log("页面加载时 - 发现 Cookie，显示密码输入表单"); // 诊断日志
             } else {
                 setPasswordForm.classList.remove('hidden');
                 passwordForm.classList.add('hidden');
+                console.log("页面加载时 - 未发现 Cookie，显示设置密码表单"); // 诊断日志
             }
         });
     </script>
