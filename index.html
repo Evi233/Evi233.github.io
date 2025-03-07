@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>简单加密解密</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 50px;
+        }
+        label, button {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>加密解密示例</h2>
+
+    <div>
+        <label for="text">输入文本:</label>
+        <input type="text" id="text" placeholder="输入需要加密的文本">
+    </div>
+    <div>
+        <button onclick="encryptText()">加密</button>
+        <button onclick="decryptText()">解密</button>
+    </div>
+
+    <div>
+        <label for="encrypted">加密结果:</label>
+        <input type="text" id="encrypted" readonly>
+    </div>
+    <div>
+        <label for="decrypted">解密结果:</label>
+        <input type="text" id="decrypted" readonly>
+    </div>
+
+    <script>
+        // 简单的加密算法：将每个字符的 Unicode 值加上一个偏移量
+        const shift = 3; // 加密偏移量
+
+        function encryptText() {
+            const inputText = document.getElementById('text').value;
+            let encryptedText = '';
+            for (let i = 0; i < inputText.length; i++) {
+                encryptedText += String.fromCharCode(inputText.charCodeAt(i) + shift);
+            }
+            document.getElementById('encrypted').value = encryptedText;
+        }
+
+        // 解密算法：将加密字符的 Unicode 值减去偏移量
+        function decryptText() {
+            const encryptedText = document.getElementById('encrypted').value;
+            let decryptedText = '';
+            for (let i = 0; i < encryptedText.length; i++) {
+                decryptedText += String.fromCharCode(encryptedText.charCodeAt(i) - shift);
+            }
+            document.getElementById('decrypted').value = decryptedText;
+        }
+    </script>
+
+</body>
+</html>
