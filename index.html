@@ -3,62 +3,278 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>简单加密解密</title>
+    <title>密码保护页面 - 加解密程序</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            margin: 50px;
+            font-family: sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f4f4f4;
+            margin: 0;
         }
-        label, button {
+
+        .container {
+            width: 100%;
+            max-width: 800px; /* 页面容器宽度增加 */
+            padding: 20px;
+            text-align: center;
+        }
+
+        .card {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        input[type="password"], textarea { /* 样式应用于密码输入框和文本域 */
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: calc(100% - 22px);
+            box-sizing: border-box;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .error-message {
+            color: red;
             margin-top: 10px;
+        }
+
+        .success-message {
+            color: green;
+            margin-top: 10px;
+        }
+
+        .content-card {
+            text-align: left;
+        }
+
+        .encryption-tool { /* 加解密工具容器样式 */
+            display: flex;
+            gap: 20px; /* 文本域之间的间距 */
+        }
+
+        .encryption-tool > div { /* 加解密工具内部 div 样式 */
+            flex: 1; /* 让左右两部分平分空间 */
+        }
+
+        .encryption-tool h3 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            color: #555;
         }
     </style>
 </head>
 <body>
+    <div class="container">
+        <div id="password-form" class="card">
+            <h2>请输入密码</h2>
+            <input type="password" id="password" placeholder="您的密码">
+            <button id="submit-password">进入</button>
+            <p id="password-message" class="error-message"></p>
+        </div>
 
-    <h2>加密解密示例</h2>
+        <div id="set-password-form" class="card hidden">
+            <h2>设置新密码</h2>
+            <input type="password" id="new-password" placeholder="新密码">
+            <button id="set-new-password">设置密码</button>
+            <p id="set-password-message" class="success-message"></p>
+        </div>
 
-    <div>
-        <label for="text">输入文本:</label>
-        <input type="text" id="text" placeholder="输入需要加密的文本">
-    </div>
-    <div>
-        <button onclick="encryptText()">加密</button>
-        <button onclick="decryptText()">解密</button>
-    </div>
-
-    <div>
-        <label for="encrypted">加密结果:</label>
-        <input type="text" id="encrypted" readonly>
-    </div>
-    <div>
-        <label for="decrypted">解密结果:</label>
-        <input type="text" id="decrypted" readonly>
+        <div id="protected-content" class="card hidden">
+            <div class="content-card">
+                <h1>欢迎来到受保护的页面！</h1>
+                <p>您已成功通过密码验证，可以使用下面的加解密工具。</p>
+                <div class="encryption-tool">
+                    <div>
+                        <h3>输入文本</h3>
+                        <textarea id="inputText" rows="8" placeholder="在此输入您要加密或解密的文本"></textarea>
+                    </div>
+                    <div>
+                        <h3>输出结果</h3>
+                        <textarea id="outputText" rows="8" placeholder="结果将显示在这里" readonly></textarea>
+                    </div>
+                </div>
+                <div style="margin-top: 20px;">
+                    <button id="encryptButton">加密</button>
+                    <button id="decryptButton">解密</button>
+                </div>
+                <div style="margin-top: 20px;">
+                    <button id="change-password-btn">更改密码</button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
-        // 简单的加密算法：将每个字符的 Unicode 值加上一个偏移量
-        const shift = 3; // 加密偏移量
+        document.addEventListener('DOMContentLoaded', function() {
+            const passwordForm = document.getElementById('password-form');
+            const setPasswordForm = document.getElementById('set-password-form');
+            const protectedContentDiv = document.getElementById('protected-content');
+            const passwordInput = document.getElementById('password');
+            const submitPasswordButton = document.getElementById('submit-password');
+            const passwordMessage = document.getElementById('password-message');
+            const newPasswordInput = document.getElementById('new-password');
+            const setNewPasswordButton = document.getElementById('set-new-password');
+            const setPasswordMessage = document.getElementById('set-password-message');
+            const changePasswordButton = document.getElementById('change-password-btn');
 
-        function encryptText() {
-            const inputText = document.getElementById('text').value;
-            let encryptedText = '';
-            for (let i = 0; i < inputText.length; i++) {
-                encryptedText += String.fromCharCode(inputText.charCodeAt(i) + shift);
-            }
-            document.getElementById('encrypted').value = encryptedText;
-        }
+            const inputTextarea = document.getElementById('inputText');
+            const outputTextarea = document.getElementById('outputText');
+            const encryptButton = document.getElementById('encryptButton');
+            const decryptButton = document.getElementById('decryptButton');
 
-        // 解密算法：将加密字符的 Unicode 值减去偏移量
-        function decryptText() {
-            const encryptedText = document.getElementById('encrypted').value;
-            let decryptedText = '';
-            for (let i = 0; i < encryptedText.length; i++) {
-                decryptedText += String.fromCharCode(encryptedText.charCodeAt(i) - shift);
+            const passwordCookieName = 'protectedPagePassword';
+            const encryptionKey = 'mySecretKey'; // 简单的密钥，请勿在生产环境中使用这种方式
+
+            // 简单的XOR加密/解密函数
+            function encryptDecrypt(text, key) {
+                if (!text) return "";
+                let result = '';
+                for (let i = 0; i < text.length; i++) {
+                    result += String.fromCharCode(text.charCodeAt(i) ^ key.charCodeAt(i % key.length));
+                }
+                return result;
             }
-            document.getElementById('decrypted').value = decryptedText;
-        }
+
+            // 设置Cookie
+            function setCookie(name, value, days) {
+                const expires = new Date();
+                expires.setDate(expires.getDate() + days);
+                document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/`;
+            }
+
+            // 获取Cookie
+            function getCookie(name) {
+                const nameEQ = name + "=";
+                const ca = document.cookie.split(';');
+                for(let i = 0; i < ca.length; i++) {
+                    let c = ca[i];
+                    while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+                    if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+                }
+                return null;
+            }
+
+            // 检查密码是否正确
+            function checkPassword(password) {
+                const encryptedStoredPassword = getCookie(passwordCookieName);
+                if (encryptedStoredPassword) {
+                    const storedPassword = encryptDecrypt(encryptedStoredPassword, encryptionKey);
+                    return password === storedPassword;
+                }
+                return false;
+            }
+
+            // 初始化页面状态
+            function initializePage() {
+                if (getCookie(passwordCookieName)) {
+                    passwordForm.classList.remove('hidden');
+                    setPasswordForm.classList.add('hidden');
+                    protectedContentDiv.classList.add('hidden');
+                } else {
+                    passwordForm.classList.add('hidden');
+                    setPasswordForm.classList.remove('hidden');
+                    protectedContentDiv.classList.add('hidden');
+                }
+            }
+
+            initializePage();
+
+            // 提交密码事件
+            submitPasswordButton.addEventListener('click', function() {
+                const enteredPassword = passwordInput.value;
+                if (checkPassword(enteredPassword)) {
+                    passwordForm.classList.add('hidden');
+                    protectedContentDiv.classList.remove('hidden');
+                    passwordMessage.textContent = '';
+                } else {
+                    passwordMessage.textContent = '密码错误，请重试。';
+                }
+                passwordInput.value = '';
+            });
+
+            // 设置新密码事件
+            setNewPasswordButton.addEventListener('click', function() {
+                const newPassword = newPasswordInput.value;
+                if (newPassword) {
+                    const encryptedPassword = encryptDecrypt(newPassword, encryptionKey);
+                    setCookie(passwordCookieName, encryptedPassword, 30);
+                    setPasswordMessage.textContent = '密码设置成功！';
+                    setPasswordForm.classList.add('hidden');
+                    passwordForm.classList.remove('hidden');
+                    setTimeout(() => {
+                        setPasswordMessage.textContent = '';
+                    }, 3000);
+                } else {
+                    setPasswordMessage.textContent = '请输入新密码。';
+                }
+                newPasswordInput.value = '';
+            });
+
+            // 更改密码按钮事件
+            changePasswordButton.addEventListener('click', function() {
+                protectedContentDiv.classList.add('hidden');
+                setPasswordForm.classList.remove('hidden');
+                passwordForm.classList.add('hidden');
+            });
+
+            // 加密按钮事件
+            encryptButton.addEventListener('click', function() {
+                const textToEncrypt = inputTextarea.value;
+                const encryptedText = encryptDecrypt(textToEncrypt, encryptionKey);
+                outputTextarea.value = encryptedText;
+            });
+
+            // 解密按钮事件
+            decryptButton.addEventListener('click', function() {
+                const textToDecrypt = inputTextarea.value;
+                const decryptedText = encryptDecrypt(textToDecrypt, encryptionKey);
+                outputTextarea.value = decryptedText;
+                if (decryptedText.includes("&#")) {
+                    outputTextarea.value = "解密结果可能包含特殊字符，请检查。";
+                }
+            });
+
+
+            // 检查是否已设置密码
+            if (getCookie(passwordCookieName)) {
+                setPasswordForm.classList.add('hidden');
+                passwordForm.classList.remove('hidden');
+            } else {
+                setPasswordForm.classList.remove('hidden');
+                passwordForm.classList.add('hidden');
+            }
+        });
     </script>
-
 </body>
 </html>
